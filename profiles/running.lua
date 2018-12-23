@@ -72,15 +72,15 @@ function setup()
       'minor',
     },
 
-    access_tags_hierarchy = Sequence {
+    foot_access_tags_hierarchy = Sequence {
       'foot',
+      'access',
+    },
+
+    access_tags_hierarchy = Sequence {
       'bicycle',
       'vehicle',
       'access'
-    },
-
-    restrictions = Set {
-      'foot'
     },
 
     cycleway_tags = Set {
@@ -95,6 +95,23 @@ function setup()
       'pedestrian',
       'footway',
       'pier'
+    },
+
+    footway_tags = Set {
+      'path',
+      'steps',
+      'pedestrian',
+      'footway',
+      'pier'
+    },
+
+    cycleway_tags = Set {
+      'track',
+      'lane',
+      'share_busway',
+      'sharrow',
+      'shared',
+      'shared_lane'
     },
 
     opposite_cycleway_tags = Set {
@@ -235,7 +252,6 @@ function process_node(profile, node, result)
   -- parse access and barrier tags
   local highway = node:get_value_by_key("highway")
   local is_crossing = highway and highway == "crossing"
-
   local access = find_access_tag(node, profile.access_tags_hierarchy)
   if access and access ~= "" then
     -- access restrictions on crossing nodes are not relevant for
@@ -280,7 +296,11 @@ function handle_bicycle_tags(profile,way,result,data)
   end
 
   -- access
-  data.access = find_access_tag(way, profile.access_tags_hierarchy)
+  if profile.footway_tags[data.highway] then
+    data.access = find_access_tag(way, profile.foot_access_tags_hierarchy)
+  else
+    data.access = find_access_tag(way, profile.access_tags_hierarchy)
+  end
   if data.access and profile.access_tag_blacklist[data.access] then
     return false
   end
