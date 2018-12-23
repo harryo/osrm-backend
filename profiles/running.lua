@@ -279,17 +279,13 @@ function handle_bicycle_tags(profile,way,result,data)
     -- initial routability check, filters out buildings, boundaries, etc
   data.route = way:get_value_by_key("route")
   data.man_made = way:get_value_by_key("man_made")
-  data.railway = way:get_value_by_key("railway")
   data.amenity = way:get_value_by_key("amenity")
-  data.public_transport = way:get_value_by_key("public_transport")
   data.bridge = way:get_value_by_key("bridge")
 
   if (not data.highway or data.highway == '') and
   (not data.route or data.route == '') and
-  (not profile.use_public_transport or not data.railway or data.railway=='') and
   (not data.amenity or data.amenity=='') and
   (not data.man_made or data.man_made=='') and
-  (not data.public_transport or data.public_transport=='') and
   (not data.bridge or data.bridge=='')
   then
     return false
@@ -365,22 +361,6 @@ function speed_handler(profile,way,result,data)
        result.forward_speed = profile.route_speeds[data.route]
        result.backward_speed = profile.route_speeds[data.route]
     end
-  -- railway platforms (old tagging scheme)
-  elseif data.railway and profile.platform_speeds[data.railway] then
-    result.forward_speed = profile.platform_speeds[data.railway]
-    result.backward_speed = profile.platform_speeds[data.railway]
-    data.way_type_allows_pushing = true
-  -- public_transport platforms (new tagging platform)
-  elseif data.public_transport and profile.platform_speeds[data.public_transport] then
-    result.forward_speed = profile.platform_speeds[data.public_transport]
-    result.backward_speed = profile.platform_speeds[data.public_transport]
-    data.way_type_allows_pushing = true
-  -- railways
-  elseif profile.use_public_transport and data.railway and profile.railway_speeds[data.railway] and profile.access_tag_whitelist[data.access] then
-    result.forward_mode = mode.train
-    result.backward_mode = mode.train
-    result.forward_speed = profile.railway_speeds[data.railway]
-    result.backward_speed = profile.railway_speeds[data.railway]
   elseif data.amenity and profile.amenity_speeds[data.amenity] then
     -- parking areas
     result.forward_speed = profile.amenity_speeds[data.amenity]
