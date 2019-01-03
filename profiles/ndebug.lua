@@ -29,13 +29,10 @@ Debug.load_profile('running')
 -- but here we can set them manually which makes debugging the profile eaiser
 
 local way = {
-  highway = 'footway',
-  name = 'Magnolia Boulevard',
+  highway = 'track',
   bicycle = 'no',
-  embankment = 'yes',
-  horse = 'no',
+  foot = 'yes',
   motor_vehicle = 'no',
-  surface = 'grass'
 }
 
 -- output will go here

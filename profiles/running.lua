@@ -78,23 +78,10 @@ function setup()
     },
 
     access_tags_hierarchy = Sequence {
+      'foot',
       'bicycle',
       'vehicle',
       'access'
-    },
-
-    cycleway_tags = Set {
-      'track',
-      'lane',
-      'share_busway',
-      'sharrow',
-      'shared',
-      'shared_lane',
-      'path',
-      'steps',
-      'pedestrian',
-      'footway',
-      'pier'
     },
 
     footway_tags = Set {
